@@ -71,3 +71,116 @@ pnpm test:e2e --debug
 ```sh
 pnpm lint
 ```
+
+### Folder Structure
+
+src/modules/
+│
+├── experience/ # Módulo de Experiencia Laboral
+│ ├── core/ # Lógica de negocio específica
+│ │ ├── entities/
+│ │ │ └── Experience.ts
+│ │ ├── repositories/
+│ │ │ └── IExperienceRepository.ts
+│ │ └── use-cases/
+│ │ ├── GetExperiencesUseCase.ts
+│ │ └── FilterByCompanyUseCase.ts
+│ │
+│ ├── infrastructure/ # Implementaciones concretas
+│ │ └── repositories/
+│ │ └── ExperienceRepository.ts
+│ │
+│ └── presentation/ # Vistas y componentes de este módulo
+│ ├── components/
+│ │ ├── ExperienceList.vue
+│ │ ├── ExperienceCard.vue
+│ │ └── ExperienceTimeline.vue
+│ ├── views/
+│ │ └── ExperiencePage.vue
+│ └── composables/
+│ └── useExperiences.ts
+│
+├── projects/ # Módulo de Proyectos
+│ ├── core/
+│ │ ├── entities/
+│ │ │ └── Project.ts
+│ │ ├── repositories/
+│ │ │ └── IProjectRepository.ts
+│ │ └── use-cases/
+│ │ └── GetProjectsUseCase.ts
+│ ├── infrastructure/
+│ │ └── repositories/
+│ │ └── ProjectRepository.ts
+│ └── presentation/
+│ ├── components/
+│ │ ├── ProjectCard.vue
+│ │ └── ProjectGrid.vue
+│ └── views/
+│ └── ProjectsPage.vue
+│
+├── about/ # Módulo "Sobre Mí"
+│ ├── core/
+│ │ ├── entities/
+│ │ │ └── PersonalInfo.ts
+│ │ ├── repositories/
+│ │ │ └── IPersonalInfoRepository.ts
+│ │ └── use-cases/
+│ │ └── GetPersonalInfoUseCase.ts
+│ ├── infrastructure/
+│ │ └── repositories/
+│ │ └── PersonalInfoRepository.ts
+│ └── presentation/
+│ ├── components/
+│ │ ├── SkillsChart.vue
+│ │ └── Biography.vue
+│ └── views/
+│ └── AboutPage.vue
+│
+├── contact/ # Módulo de Contacto
+│ ├── core/
+│ │ ├── entities/
+│ │ │ └── Contact.ts
+│ │ ├── repositories/
+│ │ │ └── IContactRepository.ts
+│ │ └── use-cases/
+│ │ └── SendMessageUseCase.ts
+│ ├── infrastructure/
+│ │ └── repositories/
+│ │ └── ContactRepository.ts
+│ └── presentation/
+│ ├── components/
+│ │ ├── ContactForm.vue
+│ │ └── SocialLinks.vue
+│ └── views/
+│ └── ContactPage.vue
+│
+└── shared/ # COMPARTIDO entre todos los módulos
+├── core/
+│ ├── entities/
+│ │ └── Technology.ts # Tecnología reusable
+│ └── interfaces/
+│ ├── IRepository.ts # Interfaz base
+│ └── IUseCase.ts # Interfaz base para casos de uso
+├── infrastructure/
+│ ├── http/
+│ │ └── HttpClient.ts # Cliente HTTP compartido
+│ └── storage/
+│ └── LocalStorage.ts # Storage compartido
+└── presentation/
+├── components/
+│ ├── atoms/
+│ │ ├── Button.vue
+│ │ ├── Icon.vue
+│ │ └── LoadingSpinner.vue
+│ ├── molecules/
+│ │ ├── Card.vue
+│ │ ├── Modal.vue
+│ │ └── Navbar.vue
+│ └── organisms/
+│ ├── Header.vue
+│ └── Footer.vue
+├── composables/
+│ ├── useLoading.ts
+│ └── useNotification.ts
+└── styles/
+└── global.css
