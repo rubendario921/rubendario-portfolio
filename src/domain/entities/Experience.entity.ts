@@ -5,10 +5,10 @@ export interface Experience {
   id: string
   company: string
   position: string
-  dateRange: DateRange //Rango de Fechas
+  dateRange: DateRange
   description: string[]
-  technologies: Technology[] // Tecnologías utilizadas
-  achievements?: string[] // Logros específicos
+  technologies: Technology[]
+  achievements?: string[]
   companyLogo?: string
 }
 

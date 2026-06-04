@@ -24,13 +24,13 @@ export class DateRange {
       (end.getMonth() - this.startDate.getMonth())
 
     if (diffMonths < 12) {
-      return `${diffMonths} ${diffMonths === 1 ? 'mes' : 'meses'}`
+      return `${diffMonths} ${diffMonths === 1 ? 'month' : 'months'}`
     }
     const years = Math.floor(diffMonths / 12)
     const months = diffMonths % 12
 
-    const yearText = `${years} ${years === 1 ? 'año' : 'años'}`
-    const monthText = months > 0 ? ` ${months} ${months === 1 ? 'mes' : 'meses'}` : ''
+    const yearText = `${years} ${years === 1 ? 'year' : 'years'}`
+    const monthText = months > 0 ? ` ${months} ${months === 1 ? 'month' : 'months'}` : ''
 
     return yearText + monthText
   }
