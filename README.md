@@ -74,113 +74,92 @@ pnpm lint
 
 ### Folder Structure
 
-src/modules/
-│
-├── experience/ # Módulo de Experiencia Laboral
-│ ├── core/ # Lógica de negocio específica
+mi-portafolio/
+├── src/
+│ ├── domain/ # Capa de dominio (independiente de frameworks)
 │ │ ├── entities/
-│ │ │ └── Experience.ts
-│ │ ├── repositories/
-│ │ │ └── IExperienceRepository.ts
-│ │ └── use-cases/
-│ │ ├── GetExperiencesUseCase.ts
-│ │ └── FilterByCompanyUseCase.ts
+│ │ │ ├── Experience.entity.ts
+│ │ │ ├── Project.entity.ts
+│ │ │ └── Skill.entity.ts
+│ │ ├── value-objects/
+│ │ │ ├── Technology.vo.ts
+│ │ │ ├── Email.vo.ts
+│ │ │ └── DateRange.vo.ts
+│ │ └── interfaces/
+│ │ ├── IExperienceRepository.interface.ts
+│ │ └── IProjectRepository.interface.ts
 │ │
-│ ├── infrastructure/ # Implementaciones concretas
-│ │ └── repositories/
-│ │ └── ExperienceRepository.ts
+│ ├── application/ # Casos de uso
+│ │ ├── use-cases/
+│ │ │ └── experience/
+│ │ │ ├── GetExperiences.use-case.ts
+│ │ │ ├── GetExperienceById.use-case.ts
+│ │ │ ├── FilterExperiencesByTech.use-case.ts
+│ │ │ └── GetCurrentJob.use-case.ts
+│ │ └── dto/
+│ │ └── experience/
+│ │ ├── ExperienceResponse.dto.ts
+│ │ └── CreateExperience.dto.ts
 │ │
-│ └── presentation/ # Vistas y componentes de este módulo
-│ ├── components/
-│ │ ├── ExperienceList.vue
-│ │ ├── ExperienceCard.vue
-│ │ └── ExperienceTimeline.vue
-│ ├── views/
-│ │ └── ExperiencePage.vue
-│ └── composables/
-│ └── useExperiences.ts
-│
-├── projects/ # Módulo de Proyectos
-│ ├── core/
-│ │ ├── entities/
-│ │ │ └── Project.ts
+│ ├── infrastructure/ # Implementaciones técnicas
 │ │ ├── repositories/
-│ │ │ └── IProjectRepository.ts
-│ │ └── use-cases/
-│ │ └── GetProjectsUseCase.ts
-│ ├── infrastructure/
-│ │ └── repositories/
-│ │ └── ProjectRepository.ts
-│ └── presentation/
-│ ├── components/
-│ │ ├── ProjectCard.vue
-│ │ └── ProjectGrid.vue
-│ └── views/
-│ └── ProjectsPage.vue
+│ │ │ └── experience/
+│ │ │ ├── ExperienceRepository.impl.ts
+│ │ │ └── experience.data.ts # Datos de tu CV
+│ │ ├── services/
+│ │ │ ├── LocalStorage.service.ts
+│ │ │ └── DateFormatter.service.ts
+│ │ └── config/
+│ │ └── app.config.ts
+│ │
+│ ├── presentation/ # Capa Vue
+│ │ ├── components/
+│ │ │ ├── experience/
+│ │ │ │ ├── ExperienceList.component.vue
+│ │ │ │ ├── ExperienceCard.component.vue
+│ │ │ │ └── ExperienceTimeline.component.vue
+│ │ │ └── shared/
+│ │ │ ├── LoadingSpinner.vue
+│ │ │ └── ErrorAlert.vue
+│ │ ├── views/
+│ │ │ ├── HomePage.vue
+│ │ │ ├── ExperiencePage.vue
+│ │ │ └── ProjectsPage.vue
+│ │ ├── composables/
+│ │ │ └── experience/
+│ │ │ └── useExperiences.composable.ts
+│ │ └── router/
+│ │ └── index.ts
+│ │
+│ └── shared/ # Utilidades transversales
+│ ├── utils/
+│ │ ├── date.utils.ts
+│ │ └── string.utils.ts
+│ └── constants/
+│ └── app.constants.ts
+
+// ESTRUCTURA RECOMENDADA
+src/
+├── domain/ # REGLAS DE NEGOCIO
+│ ├── entities/ # Experience, Project, Skill
+│ ├── value-objects/ # Email, Phone, Technology
+│ └── interfaces/ # IExperienceRepository, IProjectRepository
 │
-├── about/ # Módulo "Sobre Mí"
-│ ├── core/
-│ │ ├── entities/
-│ │ │ └── PersonalInfo.ts
-│ │ ├── repositories/
-│ │ │ └── IPersonalInfoRepository.ts
-│ │ └── use-cases/
-│ │ └── GetPersonalInfoUseCase.ts
-│ ├── infrastructure/
-│ │ └── repositories/
-│ │ └── PersonalInfoRepository.ts
-│ └── presentation/
-│ ├── components/
-│ │ ├── SkillsChart.vue
-│ │ └── Biography.vue
-│ └── views/
-│ └── AboutPage.vue
+├── application/ # CASOS DE USO
+│ ├── use-cases/ # GetExperiences, CreateProject, etc.
+│ └── dto/ # Data Transfer Objects
 │
-├── contact/ # Módulo de Contacto
-│ ├── core/
-│ │ ├── entities/
-│ │ │ └── Contact.ts
-│ │ ├── repositories/
-│ │ │ └── IContactRepository.ts
-│ │ └── use-cases/
-│ │ └── SendMessageUseCase.ts
-│ ├── infrastructure/
-│ │ └── repositories/
-│ │ └── ContactRepository.ts
-│ └── presentation/
-│ ├── components/
-│ │ ├── ContactForm.vue
-│ │ └── SocialLinks.vue
-│ └── views/
-│ └── ContactPage.vue
+├── infrastructure/ # IMPLEMENTACIONES TÉCNICAS
+│ ├── repositories/ # ExperienceRepository (implementa interfaces)
+│ ├── services/ # ApiService, StorageService
+│ └── config/ # Configuración de APIs
 │
-└── shared/ # COMPARTIDO entre todos los módulos
-├── core/
-│ ├── entities/
-│ │ └── Technology.ts # Tecnología reusable
-│ └── interfaces/
-│ ├── IRepository.ts # Interfaz base
-│ └── IUseCase.ts # Interfaz base para casos de uso
-├── infrastructure/
-│ ├── http/
-│ │ └── HttpClient.ts # Cliente HTTP compartido
-│ └── storage/
-│ └── LocalStorage.ts # Storage compartido
-└── presentation/
-├── components/
-│ ├── atoms/
-│ │ ├── Button.vue
-│ │ ├── Icon.vue
-│ │ └── LoadingSpinner.vue
-│ ├── molecules/
-│ │ ├── Card.vue
-│ │ ├── Modal.vue
-│ │ └── Navbar.vue
-│ └── organisms/
-│ ├── Header.vue
-│ └── Footer.vue
-├── composables/
-│ ├── useLoading.ts
-│ └── useNotification.ts
-└── styles/
-└── global.css
+├── presentation/ # VUE SPECIFIC
+│ ├── components/ # Componentes Vue
+│ ├── views/ # Páginas
+│ ├── composables/ # useExperiences, useProjects
+│ └── router/ # Vue Router config
+│
+└── shared/ # UTILIDADES TÉCNICAS
+├── utils/ # date-helpers, string-helpers
+└── constants/ # app-constants

@@ -99,8 +99,8 @@ export class SkillEntity {
    */
   getProficiencyLabel(): string {
     if (this.skill.level >= 90) return 'Expert'
-    if (this.skill.level >= 70) return 'Advanced'
-    if (this.skill.level >= 50) return 'Intermediate'
+    if (this.skill.level >= 80) return 'Advanced'
+    if (this.skill.level >= 60) return 'Intermediate'
     return 'Beginner'
   }
 }

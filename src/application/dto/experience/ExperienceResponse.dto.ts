@@ -7,7 +7,7 @@ export interface ExperienceResponse {
   startDate: string
   endDate: string | null
   duration: string
-  idCurrentJob: boolean
+  isCurrentJob: boolean
   description: string[]
   technologies: { name: string; category: string }[]
   achievements?: string[]
@@ -24,7 +24,7 @@ export class ExperienceResponseDTO {
       startDate: experience.dateRange.formatStartDate(),
       endDate: experience.dateRange.isOpenEnded() ? null : experience.dateRange.formatEndDate(),
       duration: experience.dateRange.getDuration(),
-      idCurrentJob: experience.isCurrentJob(),
+      isCurrentJob: experience.isCurrentJob(),
       description: experience.description,
       technologies: experience.technologies.map((tech) => ({
         name: tech.name,

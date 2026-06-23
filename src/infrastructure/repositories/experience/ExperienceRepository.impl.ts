@@ -1,6 +1,7 @@
 import { ExperienceEntity } from '@/domain/entities/Experience.entity'
 import type { IExperienceRepository } from '@/domain/interfaces/IExperienceRepository.interface'
 import { EXPERIENCES_DATA } from './experience.data'
+import { loggerService } from '@/infrastructure/services/Logger.service'
 
 /**
  * Concrete implementation of the IExperienceRepository interface.
@@ -17,12 +18,18 @@ export class ExperienceRepository implements IExperienceRepository {
    * Loads the static experience data, parses them into Domain Entities, and stores them in memory.
    */
   private loadExperiences(): void {
-    this.experiences = EXPERIENCES_DATA.map((data, index) =>
-      ExperienceEntity.create({
-        ...data,
-        id: (index + 1).toString(),
-      }),
-    )
+    try {
+      this.experiences = EXPERIENCES_DATA.map((data, index) =>
+        ExperienceEntity.create({
+          ...data,
+          id: (index + 1).toString(),
+        }),
+      )
+      loggerService.info(`Successfully loaded ${this.experiences.length} experiences.`)
+    } catch (error) {
+      loggerService.error('Failed to parse mock experiences data', error)
+      this.experiences = []
+    }
   }
 
   /**
@@ -31,8 +38,13 @@ export class ExperienceRepository implements IExperienceRepository {
    * @returns A promise that resolves to an array of ExperienceEntity.
    */
   async findAll(): Promise<ExperienceEntity[]> {
-    await this.delay(500) // Simulate async operation
-    return [...this.experiences]
+    try {
+      await this.delay(300) // Simulate async operation
+      return [...this.experiences]
+    } catch (error) {
+      loggerService.error('Error fetching experiences', error)
+      return []
+    }
   }
 
   /**
@@ -41,8 +53,13 @@ export class ExperienceRepository implements IExperienceRepository {
    * @returns A promise that resolves to the matching ExperienceEntity, or null if not found.
    */
   async findById(id: string): Promise<ExperienceEntity | null> {
-    await this.delay(300) // Simulate async operation
-    return this.experiences.find((experience) => experience.id.includes(id)) || null
+    try {
+      await this.delay(150) // Simulate async operation
+      return this.experiences.find((experience) => experience.id === id) || null
+    } catch (error) {
+      loggerService.error(`Error finding experience by ID: ${id}`, error)
+      return null
+    }
   }
 
   /**
@@ -52,8 +69,13 @@ export class ExperienceRepository implements IExperienceRepository {
    * @returns A promise that resolves to an array of matching ExperienceEntity.
    */
   async findByCompany(company: string): Promise<ExperienceEntity[]> {
-    await this.delay(300)
-    return this.experiences.filter((experience) => experience.belongsToCompany(company))
+    try {
+      await this.delay(150)
+      return this.experiences.filter((experience) => experience.belongsToCompany(company))
+    } catch (error) {
+      loggerService.error(`Error finding experience by company: ${company}`, error)
+      return []
+    }
   }
 
   /**
@@ -61,8 +83,13 @@ export class ExperienceRepository implements IExperienceRepository {
    * @returns A promise that resolves to the current ExperienceEntity, or null if no current job is found.
    */
   async findCurrentJob(): Promise<ExperienceEntity | null> {
-    await this.delay(300)
-    return this.experiences.find((experience) => experience.isCurrentJob()) || null
+    try {
+      await this.delay(150)
+      return this.experiences.find((experience) => experience.isCurrentJob()) || null
+    } catch (error) {
+      loggerService.error('Error finding current job', error)
+      return null
+    }
   }
 
   /**
@@ -71,8 +98,13 @@ export class ExperienceRepository implements IExperienceRepository {
    * @returns A promise that resolves to an array of matching ExperienceEntity.
    */
   async findByTechnology(technology: string): Promise<ExperienceEntity[]> {
-    await this.delay(300)
-    return this.experiences.filter((experience) => experience.hasTechnology(technology))
+    try {
+      await this.delay(150)
+      return this.experiences.filter((experience) => experience.hasTechnology(technology))
+    } catch (error) {
+      loggerService.error(`Error filtering experience by technology: ${technology}`, error)
+      return []
+    }
   }
 
   /**
@@ -84,3 +116,4 @@ export class ExperienceRepository implements IExperienceRepository {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
 }
+export default ExperienceRepository

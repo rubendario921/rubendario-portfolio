@@ -1,22 +1,70 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-  "name": "Node.js & TypeScript",
-  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie"
+  "name": "Rubén Darío - Portfolio DevContainer",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22-bookworm",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
-  // "features": {},
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
+  // - 5173: Vite development server
+  // - 4173: Vite preview server
+  // - 9323: Playwright HTML Report viewer
+  "forwardPorts": [5173, 4173, 9323],
+
+  // Mount a named volume to cache pnpm packages.
+  // This speeds up container rebuilds and avoids cross-filesystem hard link issues.
+  "mounts": [
+    "source=rubendario-portfolio-pnpm-store,target=/home/node/.local/share/pnpm/store,type=volume"
+  ],
+
+  // Set pnpm home path environment variable.
+  "containerEnv": {
+    "PNPM_HOME": "/home/node/.local/share/pnpm"
+  },
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "yarn install",
+  // - Enables Corepack (which includes pnpm)
+  // - Configures the pnpm store directory to use the mounted volume
+  // - Installs node dependencies
+  // - Installs Playwright browsers and their system-level dependencies
+  "postCreateCommand": "corepack enable && pnpm config set store-dir /home/node/.local/share/pnpm/store && pnpm install && npx playwright install --with-deps",
 
   // Configure tool-specific properties.
-  // "customizations": {},
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "explorer.fileNesting.enabled": true,
+        "explorer.fileNesting.patterns": {
+          "tsconfig.json": "tsconfig.*.json, env.d.ts, typed-router.d.ts",
+          "vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*",
+          "package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .oxlint*, oxlint*, .oxfmt*, .prettier*, prettier*, .editorconfig"
+        },
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit"
+        },
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[vue]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      },
+      "extensions": [
+        "Vue.volar",
+        "vitest.explorer",
+        "ms-playwright.playwright",
+        "dbaeumer.vscode-eslint",
+        "EditorConfig.EditorConfig",
+        "oxc.oxc-vscode",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
 
-  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-  // "remoteUser": "root"
+  // Connect as the non-root 'node' user.
+  "remoteUser": "node"
 }
+
